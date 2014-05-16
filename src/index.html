@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ToDoList</title>
+    <script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.js"></script>
+    <script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/knockout/knockout-2.2.0.js"></script>
+</head>
+
+<body>
+<p style="font-weight: bold;">To Do List</p>
+
+<div>
+    <form data-bind="submit: add">
+        <div>
+            New task: <input data-bind="value: newItem" placeholder="type here"/>
+            <button type="submit">Add</button>
+        </div>
+    </form>
+    <ul data-bind="foreach : tasks">
+        <li>
+            <span data-bind="text: title"></span>
+            <input data-bind="value: title, visible: false"/></span>
+            <button data-bind="click: $parent.remove">Remove</button>
+            <input type="checkbox" data-bind="checked: false">
+        </li>
+    </ul>
+</div>
+
+<script>
+
+    function Item(data) {
+        this.title = ko.observable(data.title);
+        this.isDone = ko.observable(data.isDone);
+        this.tasks = ko.observableArray([]);
+    }
+
+    function ViewModel() {
+        var self = this;
+        self.newItem = ko.observable();
+        self.tasks = ko.observableArray([]);
+
+        self.add = function () {
+            self.tasks.push(new Item({title: self.newItem(), isDone: self.newItem()}));
+            self.newItem("");
+        };
+
+        self.remove = function (task) {
+            self.tasks.remove(task);
+        };
+    }
+
+    ko.applyBindings(new ViewModel());
+</script>
+
+
+</body>
+</html>
